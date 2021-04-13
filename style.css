@@ -1,0 +1,17 @@
+.container {
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.card {
+    margin: 10px;
+}
+
+.card-header {
+    font-size: large;
+    font-weight: 800;
+}
+
+.card-header span {
+    font-size: larger;
+}
