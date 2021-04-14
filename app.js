@@ -1,7 +1,3 @@
-// kapitalizacji odsetek co "L" secund L - losowa liczba całkowita (5 - 10) generowana per instancje Bank
-
-// Mam konta w "X" różnych bankach
-
 const howManyAccounts = 4;
 
 class BankAcount {
@@ -35,6 +31,13 @@ class BankAcount {
   }
   setDepositIntrests = (depositIntrest) => {
       this.depositIntrest = depositIntrest;
+  }
+  getDepositInterests = () =>{
+      return this.depositIntrest;
+  }
+
+  getTransferCommision = () => {
+      return this.transferCommision;
   }
 
   getIntrests = () => {
@@ -74,43 +77,46 @@ bankAccounts.forEach((account) => {
 });
 
 
-bankAccounts.forEach((account) => {
-    const interval = account.getInterval();
-    setInterval((id) => {  
-      console.log(account.depositname)
-      console.log(interval, 'interval')
-    },interval*1000,(0)); 
+//// FUNCTIONS
+
+// Get all deposits interests
+const allDepositIntersts = () =>{
+    const depossitInterests = [];
+    bankAccounts.forEach((account) => {
+        const inerest = account.getDepositInterests();
+        depossitInterests.push(inerest);
+    });
+     return depossitInterests;
+} 
+
+// Find higest deposit interest
+const findHigestDepositInterest = (arrOfAllDepositsInterests) => {
+  return Math.max.apply(null, arrOfAllDepositsInterests);
+}
+
+
+
+const arrOfAllDepositsInterests = allDepositIntersts()
+const highestInterest = findHigestDepositInterest(arrOfAllDepositsInterests);
+
+// Check if transfer commision is lower than highest intrest rate
+const listOfDepositsForTransfers = bankAccounts.filter((account) => {
+    const transferCommision = account.getTransferCommision();
+    const interests = account.getDepositInterests();
+    return (highestInterest>transferCommision && highestInterest>interests)
 });
 
-// setInterval((id) => {
-//   console.log(bankAccounts[id]);
-// },2000,(1));
+// Nr konta na które robimy przelew
+const indexOfDeposit = arrOfAllDepositsInterests.findIndex(index =>index===highestInterest)
 
-// setInterval((id) => {
-//     console.log(bankAccounts[id])
-//   },3000,(2));
-  
-// setInterval((id) => {
-//     console.log(bankAccounts[id]);
-//   },4000,(3));
+console.log(listOfDepositsForTransfers, 'listOfDepositsForTransfers')
+console.log(highestInterest, 'highestInterest')
+console.log(indexOfDeposit, 'przelew na')
 
-// bankAccounts.push(new BankAcount());
-// bankAccounts[0].getData()
-// const rate = bankAccounts[0].getCapitalizationRate();
-// console.log(rate)
-
-// setInterval(() => {
-// const intrests = bankAccounts[0].getIntrests();
-// console.log(intrests, 'intrests')
-// bankAccounts[0].setCapital(intrests);
-// bankAccounts[0].getData();
-// }, rate*1000);
-
-// bankAccounts.push(new BankAcount());
-// bankAccounts[0].getData();
-// const intrests = bankAccounts[0].getIntrests();
-// console.log(typeof intrests, 'intrests')
-// bankAccounts[0].setCapital(intrests);
-// bankAccounts[0].getData();
-
-// console.log(bankAccounts)
+// bankAccounts.forEach((account) => {
+//     const interval = account.getInterval();
+//     setInterval((account) => {  
+//       console.log(account.depositname)
+//       console.log(interval, 'interval')
+//     },interval*1000,(account)); 
+// });
