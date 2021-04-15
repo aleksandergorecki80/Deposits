@@ -21,13 +21,23 @@ const getDepositsToTransferFrom = (bankAccounts, highestInterestRate) => {
         const transferCommision = account.getTransferCommision();
         const interests = account.getDepositInterestsRate();
       
-        // if (highestInterest > transferCommision && highestInterest > interests) {
-        //   console.log('Opłata za przelew=' + account.depositName);
-        //   console.log('Opłata za przelew=' + transferCommision);
-        //   console.log('Najwyzsze odsetki=' + highestInterest);
-        //   console.log('Odsetki na tym koncie=' + interests);
-        //   console.log('--------------------------------------');
-        // }
+        if (highestInterestRate > transferCommision && highestInterestRate > interests) {
+          console.log('Opłata za przelew=' + account.depositName);
+          console.log('Opłata za przelew=' + transferCommision);
+          console.log('Najwyzsze odsetki=' + highestInterestRate);
+          console.log('Odsetki na tym koncie=' + interests);
+          console.log('--------------------------------------');
+        }
         return highestInterestRate > transferCommision && highestInterestRate > interests;
       });
+}
+
+const render = (bankAccounts) =>{
+  const container = document.getElementById('container');
+  container.innerHTML = '';
+  bankAccounts.forEach(account => {
+    const card = account.getData();
+    container.insertAdjacentHTML('afterBegin', card);
+  });
+  return container;
 }

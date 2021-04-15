@@ -1,5 +1,6 @@
+// SET INITIAL STATE
 const howManyAccounts = 4;
-// Initialisation of deposits
+// Deposits
 const bankAccounts = [];
 for (i = 0; i < howManyAccounts; i++) {
   const depositName = `Lokata nr <span>${i}</span>`;
@@ -17,53 +18,59 @@ for (i = 0; i < howManyAccounts; i++) {
     )
   );
 }
-
-// set initial deposits interests
+// Interests rates
 bankAccounts.forEach((account) => {
   const depositIntrestRate = parseFloat(
     (Math.random() * (0.15 - 0.01) + 0.01).toFixed(2)
   );
   account.setDepositIntrestsRate(depositIntrestRate);
-  const card = account.getData();
-  const container = document.getElementById('container');
-  container.insertAdjacentHTML('afterBegin', card);
 });
-
+render(bankAccounts);
 
 //    --  App runs ---    //
-const arrOfAllDepositsInterests = allDepositIntersts();
-const highestInterestRate = findHigestDepositInterest(arrOfAllDepositsInterests);
-const arrOfDepositsToTransferFrom = getDepositsToTransferFrom(bankAccounts, highestInterestRate);
-// Index of the deposit to tranfer 
-const indexAccountTransferTo = arrOfAllDepositsInterests.findIndex(
-  (index) => index === highestInterestRate
-);
-//  MAKE TRANSFERS
-arrOfDepositsToTransferFrom.forEach((account) => {
-    const moneyToTransfer = account.getCapital()
-    account.outcomeTransfer(moneyToTransfer);
-    bankAccounts[indexAccountTransferTo].incomTransfer(moneyToTransfer);
-});
-// ADD INTERESTS AND SET NEW BALANS
-const interests = bankAccounts[indexAccountTransferTo].getIntrests();
-bankAccounts[indexAccountTransferTo].addInterestsToCapital(interests);
-const newBalance = bankAccounts[indexAccountTransferTo].getCapital();
-console.log(newBalance, 'New balance');
-
-// SET NEW INTEREST RATE
-const depositIntrestRate = parseFloat(
-  (Math.random() * (0.15 - 0.01) + 0.01).toFixed(2)
-);
-// account.setDepositIntrestsRate(depositIntrestRate);
-
-
-console.log(bankAccounts);
 bankAccounts.forEach((account) => {
-    const interval = account.getInterval();
-    setInterval((account) => {
-      console.log(account.depositName, interval, 'interval')
+  const interval = account.getInterval();
+  const intervals = setInterval(
+    (account) => {
+      const arrOfAllDepositsInterests = allDepositIntersts();
+      const highestInterestRate = findHigestDepositInterest(
+        arrOfAllDepositsInterests
+      );
+      const arrOfDepositsToTransferFrom = getDepositsToTransferFrom(
+        bankAccounts,
+        highestInterestRate
+      );
+      // Index of the deposit to tranfer
+      const indexAccountTransferTo = arrOfAllDepositsInterests.findIndex(
+        (index) => index === highestInterestRate
+      );
+      const transferMoneyTo = bankAccounts[indexAccountTransferTo];
+      //  MAKE TRANSFERS
+      arrOfDepositsToTransferFrom.forEach((account) => {
+        const moneyToTransfer = account.getCapital();
+        account.outcomeTransfer(moneyToTransfer);
+        transferMoneyTo.incomTransfer(moneyToTransfer);
+      });
+      // ADD INTERESTS AND SET A NEW BALANS
+      const interests = transferMoneyTo.getIntrests();
+      transferMoneyTo.addInterestsToCapital(interests);
+      const newBalance = transferMoneyTo.getCapital();
+      
+      // RENDER
+      render(bankAccounts);
 
+      // SET NEW INTERESTS RATE
+      const depositIntrestRate = parseFloat(
+        (Math.random() * (0.15 - 0.01) + 0.01).toFixed(2)
+      );
+      account.setDepositIntrestsRate(depositIntrestRate);
+    },
+    interval * 1000,
+    account
+  );
 
-
-    },interval*1000,(account));
+  document.getElementById('stop').addEventListener('click', () => {
+    console.log('STOP')
+    clearInterval(intervals);
+  });
 });
