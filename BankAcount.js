@@ -59,5 +59,3 @@ class BankAcount {
       this.seedCapital = this.seedCapital - amount;
     }; 
   }
-
-// export default BankAcount;

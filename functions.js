@@ -16,18 +16,18 @@ const findHigestDepositInterest = (arrOfAllDepositsInterests) => {
   };
 
 // Get list of deposit to transfer from
-const getDepositsToTransferFrom = () => {
+const getDepositsToTransferFrom = (bankAccounts, highestInterestRate) => {
     return bankAccounts.filter((account) => {
         const transferCommision = account.getTransferCommision();
         const interests = account.getDepositInterestsRate();
       
-        if (highestInterest > transferCommision && highestInterest > interests) {
-          console.log('Opłata za przelew=' + account.depositName);
-          console.log('Opłata za przelew=' + transferCommision);
-          console.log('Najwyzsze odsetki=' + highestInterest);
-          console.log('Odsetki na tym koncie=' + interests);
-          console.log('--------------------------------------');
-        }
-        return highestInterest > transferCommision && highestInterest > interests;
+        // if (highestInterest > transferCommision && highestInterest > interests) {
+        //   console.log('Opłata za przelew=' + account.depositName);
+        //   console.log('Opłata za przelew=' + transferCommision);
+        //   console.log('Najwyzsze odsetki=' + highestInterest);
+        //   console.log('Odsetki na tym koncie=' + interests);
+        //   console.log('--------------------------------------');
+        // }
+        return highestInterestRate > transferCommision && highestInterestRate > interests;
       });
 }
