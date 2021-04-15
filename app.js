@@ -1,69 +1,3 @@
-class BankAcount {
-  constructor(depositName, seedCapital, capitalisationRate, transferCommision) {
-    this.depositName = depositName;
-    this.seedCapital = seedCapital;
-    this.capitalisationRate = capitalisationRate;
-    this.depositIntrest = '';
-    this.transferCommision = transferCommision;
-  }
-
-  getData = () => {
-    return `<div class="card" style="width: 18rem;">
-    <div class="card-header">
-     ${this.depositName}
-    </div>
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item"><b>Kapital</b>: ${
-        this.seedCapital
-      } ${typeof this.seedCapital}</li>
-      <li class="list-group-item">Kapitalizacja co: ${
-        this.capitalisationRate
-      } ${typeof this.capitalisationRate}</li>
-      <li class="list-group-item">Odsetki: ${this.depositIntrest} ${typeof this
-      .depositIntrest}</li>
-      <li class="list-group-item">Prowizja od przelewu: ${
-        this.transferCommision
-      } ${typeof this.transferCommision}</li>
-    </ul>
-  </div>`;
-  };
-
-  getCapital = () => {
-    return this.seedCapital;
-  }
-
-  incomTransfer = (amount) => {
-    this.seedCapital = this.seedCapital + amount;
-  };
-  outcomeTransfer = (amount) => {
-    this.seedCapital = this.seedCapital - amount;
-  };
-  getInterval = () => {
-    return this.capitalisationRate;
-  };
-  setDepositIntrests = (depositIntrest) => {
-    this.depositIntrest = depositIntrest;
-  };
-  getDepositInterests = () => {
-    return this.depositIntrest;
-  };
-  getTransferCommision = () => {
-    return this.transferCommision;
-  };
-
-  getIntrests = () => {
-    const result = this.seedCapital * this.depositIntrest;
-    const rounded = result.toFixed(2);
-    return parseFloat(rounded);
-  };
-  setCapital = (intrests) => {
-    this.seedCapital = parseFloat((this.seedCapital + intrests).toFixed(2));
-  };
-  getCapitalizationRate = () => {
-    return this.capitalisationRate;
-  };
-}
-
 const howManyAccounts = 4;
 // Initialisation of deposits
 const bankAccounts = [];
@@ -86,10 +20,10 @@ for (i = 0; i < howManyAccounts; i++) {
 
 // set initial deposits interests
 bankAccounts.forEach((account) => {
-  const depositIntrest = parseFloat(
+  const depositIntrestRate = parseFloat(
     (Math.random() * (0.15 - 0.01) + 0.01).toFixed(2)
   );
-  account.setDepositIntrests(depositIntrest);
+  account.setDepositIntrestsRate(depositIntrestRate);
   const card = account.getData();
   const container = document.getElementById('container');
   container.insertAdjacentHTML('afterBegin', card);
@@ -101,7 +35,7 @@ bankAccounts.forEach((account) => {
 const allDepositIntersts = () => {
   const depossitInterests = [];
   bankAccounts.forEach((account) => {
-    const inerest = account.getDepositInterests();
+    const inerest = account.getDepositInterestsRate();
     depossitInterests.push(inerest);
   });
   return depossitInterests;
@@ -120,7 +54,7 @@ console.log(highestInterest, 'highestInterest');
 // Check if transfer commision is lower than highest intrest rate
 const listOfDepositsTransfersFrom = bankAccounts.filter((account) => {
   const transferCommision = account.getTransferCommision();
-  const interests = account.getDepositInterests();
+  const interests = account.getDepositInterestsRate();
 
   if (highestInterest > transferCommision && highestInterest > interests) {
     console.log('Opłata za przelew=' + account.depositName);
@@ -155,6 +89,11 @@ listOfDepositsTransfersFrom.forEach((account) => {
     console.log('wplacamy na index: ' + indexAccountTransferTo)
     bankAccounts[indexAccountTransferTo].incomTransfer(moneyToTransfer);
 });
+
+// Obliczamy oprocentowanie oraz dodajemy odsetki do kapitalu
+  const interests = bankAccounts[indexAccountTransferTo].getIntrests();
+  console.log(interests, 'interests')
+
 
 console.log(bankAccounts);
 // bankAccounts.forEach((account) => {
