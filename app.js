@@ -29,56 +29,19 @@ bankAccounts.forEach((account) => {
   container.insertAdjacentHTML('afterBegin', card);
 });
 
-//// FUNCTIONS
 
-// Get all deposits interests
-const allDepositIntersts = () => {
-  const depossitInterests = [];
-  bankAccounts.forEach((account) => {
-    const inerest = account.getDepositInterestsRate();
-    depossitInterests.push(inerest);
-  });
-  return depossitInterests;
-};
-
-// Find higest deposit interest
-const findHigestDepositInterest = (arrOfAllDepositsInterests) => {
-  return Math.max.apply(null, arrOfAllDepositsInterests);
-};
+//    --  App runs ---    //
 
 const arrOfAllDepositsInterests = allDepositIntersts();
 const highestInterest = findHigestDepositInterest(arrOfAllDepositsInterests);
-console.log(highestInterest, 'highestInterest');
+const arrOfDepositsToTransferFrom = getDepositsToTransferFrom();
 
-
-// Check if transfer commision is lower than highest intrest rate
-const listOfDepositsTransfersFrom = bankAccounts.filter((account) => {
-  const transferCommision = account.getTransferCommision();
-  const interests = account.getDepositInterestsRate();
-
-  if (highestInterest > transferCommision && highestInterest > interests) {
-    console.log('Opłata za przelew=' + account.depositName);
-    console.log('Opłata za przelew=' + transferCommision);
-    console.log('Najwyzsze odsetki=' + highestInterest);
-    console.log('Odsetki na tym koncie=' + interests);
-    console.log('--------------------------------------');
-  }
-  return highestInterest > transferCommision && highestInterest > interests;
-});
-
-// Nr konta na które robimy przelew
+// Index of the deposit to tranfer 
 const indexAccountTransferTo = arrOfAllDepositsInterests.findIndex(
   (index) => index === highestInterest
 );
 
-console.log(listOfDepositsTransfersFrom, 'listOfDepositsTransfersFrom');
-
-// console.log(
-//   bankAccounts[indexAccountTransferTo],
-//   'przelew na: ' + bankAccounts[indexAccountTransferTo].depositName
-// );
-
-listOfDepositsTransfersFrom.forEach((account) => {
+arrOfDepositsToTransferFrom.forEach((account) => {
     const moneyToTransfer = account.getCapital()
     account.outcomeTransfer(moneyToTransfer);
     console.log('moneyToTransfer: ' + moneyToTransfer);
@@ -90,9 +53,12 @@ listOfDepositsTransfersFrom.forEach((account) => {
     bankAccounts[indexAccountTransferTo].incomTransfer(moneyToTransfer);
 });
 
-// Obliczamy oprocentowanie oraz dodajemy odsetki do kapitalu
-  const interests = bankAccounts[indexAccountTransferTo].getIntrests();
-  console.log(interests, 'interests')
+const interests = bankAccounts[indexAccountTransferTo].getIntrests();
+bankAccounts[indexAccountTransferTo].addInterestsToCapital(interests);
+
+const newBalance = bankAccounts[indexAccountTransferTo].getCapital();
+console.log(newBalance, 'New balance');
+
 
 
 console.log(bankAccounts);
