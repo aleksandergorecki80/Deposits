@@ -25,12 +25,14 @@ bankAccounts.forEach((account) => {
   );
   account.setDepositIntrestsRate(depositIntrestRate);
 });
-render(bankAccounts);
 
-//    --  App runs ---    //
+const initialTotalAmount = getTotalAmount(bankAccounts);
+render(bankAccounts, initialTotalAmount);
+
+//    --  APP RUNS ---    //
 bankAccounts.forEach((account) => {
   const interval = account.getInterval();
-  const intervals = setInterval(
+  setInterval(
     (account) => {
       const arrOfAllDepositsInterests = allDepositIntersts();
       const highestInterestRate = findHigestDepositInterest(
@@ -54,11 +56,7 @@ bankAccounts.forEach((account) => {
       // ADD INTERESTS AND SET A NEW BALANS
       const interests = transferMoneyTo.getIntrests();
       transferMoneyTo.addInterestsToCapital(interests);
-      const newBalance = transferMoneyTo.getCapital();
       
-      // RENDER
-      render(bankAccounts);
-
       // SET NEW INTERESTS RATE
       const depositIntrestRate = parseFloat(
         (Math.random() * (0.15 - 0.01) + 0.01).toFixed(2)
@@ -68,9 +66,10 @@ bankAccounts.forEach((account) => {
     interval * 1000,
     account
   );
-
-  document.getElementById('stop').addEventListener('click', () => {
-    console.log('STOP')
-    clearInterval(intervals);
-  });
 });
+
+setInterval(() => {
+      // RENDER
+      const totalAmount = getTotalAmount(bankAccounts);
+      render(bankAccounts, totalAmount);
+}, 60000)

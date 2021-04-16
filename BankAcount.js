@@ -14,15 +14,14 @@ class BankAcount {
       <ul class="list-group list-group-flush">
         <li class="list-group-item"><b>Kapital</b>: ${
           this.seedCapital
-        } ${typeof this.seedCapital}</li>
+        } zł</li>
         <li class="list-group-item">Kapitalizacja co: ${
           this.capitalisationRate
-        } ${typeof this.capitalisationRate}</li>
-        <li class="list-group-item">Odsetki: ${this.depositIntrestRate} ${typeof this
-        .depositIntrestRate}</li>
+        } s.</li>
+        <li class="list-group-item">Odsetki: ${Math.floor(this.depositIntrestRate * 100)} %</li>
         <li class="list-group-item">Prowizja od przelewu: ${
-          this.transferCommision
-        } ${typeof this.transferCommision}</li>
+          Math.floor(this.transferCommision * 100)
+        } %</li>
       </ul>
     </div>`;
     };
